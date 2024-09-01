@@ -2,30 +2,26 @@
 <html>
   <head>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/2.1.8/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
   </head>
   <body>
     <!-- AR scene setup -->
-    <a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+    <a-scene embedded arjs="sourceType: webcam;">
       
-      <!-- Define the NFT marker for the flyer image -->
-      <a-nft
-        type="nft"
-        url="marker"
-        smooth="true"
-        smoothCount="10"
-        smoothTolerance=".01"
-        smoothThreshold="5">
-        
-        <!-- Video to replace the flyer image -->
+      <!-- Define the Hiro marker for AR detection -->
+      <a-marker preset="hiro">
+        <!-- Video entity to display on top of the Hiro marker -->
         <a-video
           src="video.mp4"
-          width="1.5" 
+          width="1.5"
           height="1"
           position="0 0 0"
-          rotation="-90 0 0">
+          rotation="-90 0 0"
+          autoplay="true"
+          loop="true"
+          muted="true">
         </a-video>
-      </a-nft>
+      </a-marker>
       
       <!-- Camera setup -->
       <a-entity camera></a-entity>
