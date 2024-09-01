@@ -7,7 +7,6 @@
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <style>
-        /* Ensure the AR scene covers the full viewport */
         body, html {
             margin: 0;
             padding: 0;
@@ -39,25 +38,32 @@
     <script>
         const videoElement = document.getElementById('overlay-video');
         const targetEntity = document.getElementById('target');
+        let userInteracted = false;
 
-        videoElement.addEventListener('canplay', () => {
-            console.log('Video can play');
-        });
-
-        targetEntity.addEventListener('targetFound', () => {
-            console.log('Target detected. Playing video...');
+        // Function to play the video
+        const playVideo = () => {
             videoElement.play().then(() => {
                 console.log('Video is playing');
-                videoElement.muted = false;
+                videoElement.muted = false; // Ensure the video is not muted
             }).catch((error) => {
                 console.error('Video play failed:', error);
             });
+        };
+
+        // Listen for user interaction to enable autoplay
+        window.addEventListener('click', () => {
+            if (!userInteracted) {
+                userInteracted = true;
+                playVideo();
+            }
         });
 
-        window.addEventListener('click', () => {
-            videoElement.play().catch((error) => {
-                console.error('Video play failed due to autoplay policy:', error);
-            });
+        // Attempt to play the video when the target is detected
+        targetEntity.addEventListener('targetFound', () => {
+            console.log('Target detected. Playing video...');
+            if (userInteracted) {
+                playVideo();
+            }
         });
     </script>
 </body>
