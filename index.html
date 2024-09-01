@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MindAR Video Overlay Example</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/MindAR-js/aframe/dist/aframe-mindar.min.css" />
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/MindAR-js/aframe/dist/aframe-mindar.min.js"></script>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 </head>
 <body>
-    <a-scene mindar="imageTargetSrc: ./targets.mind; autoStart: true;" vr-mode-ui="enabled: false" embedded>
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: true;" vr-mode-ui="enabled: false" embedded>
         <a-assets>
-            <video id="overlay-video" src="./video.mp4" loop crossorigin="anonymous"></video>
+            <video id="overlay-video" src="./video.mp4" loop crossorigin="anonymous" playsinline muted preload="auto"></video>
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -19,5 +18,18 @@
             <a-video src="#overlay-video" width="1" height="0.56" position="0 0 0"></a-video>
         </a-entity>
     </a-scene>
+
+    <script>
+        const videoElement = document.getElementById('overlay-video');
+        videoElement.addEventListener('loadeddata', () => {
+            videoElement.play();
+        });
+
+        window.addEventListener('click', () => {
+            videoElement.play().catch((error) => {
+                console.error('Video play failed:', error);
+            });
+        });
+    </script>
 </body>
 </html>
