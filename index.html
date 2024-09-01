@@ -11,12 +11,12 @@
     <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: true;" vr-mode-ui="enabled: false" embedded>
         <a-assets>
             <!-- Ensure the correct video file path is specified -->
-            <video id="overlay-video" src="./video.mp4" loop crossorigin="anonymous" playsinline muted preload="auto"></video>
+            <video id="overlay-video" src="./video.mp4" loop crossorigin="anonymous" playsinline preload="auto"></video>
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
         <a-entity mindar-image-target="targetIndex: 0" id="target">
-            <a-video src="#overlay-video" width="1" height="0.56" position="0 0 0"></a-video>
+            <a-video src="#overlay-video" width="1" height="0.56" position="0 0 0" autoplay="true"></a-video>
         </a-entity>
     </a-scene>
 
@@ -24,7 +24,6 @@
         const videoElement = document.getElementById('overlay-video');
         const targetEntity = document.getElementById('target');
 
-        // Ensure video is playable and loaded properly
         videoElement.addEventListener('canplay', () => {
             console.log('Video can play');
         });
@@ -33,6 +32,8 @@
             console.log('Target detected. Playing video...');
             videoElement.play().then(() => {
                 console.log('Video is playing');
+                // Unmute the video once the target is found
+                videoElement.muted = false;
             }).catch((error) => {
                 console.error('Video play failed:', error);
             });
