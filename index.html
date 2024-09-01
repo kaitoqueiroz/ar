@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/2.1.8/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body>
+    <!-- AR scene setup -->
+    <a-scene embedded arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;">
+      
+      <!-- Define the NFT marker for the flyer image -->
+      <a-nft
+        type="nft"
+        url="image-marker.iset"
+        smooth="true"
+        smoothCount="10"
+        smoothTolerance=".01"
+        smoothThreshold="5">
+        
+        <!-- Video to replace the flyer image -->
+        <a-video
+          src="video.mp4"
+          width="1.5" 
+          height="1"
+          position="0 0 0"
+          rotation="-90 0 0">
+        </a-video>
+      </a-nft>
+      
+      <!-- Camera setup -->
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>
