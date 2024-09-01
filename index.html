@@ -24,20 +24,24 @@
         const videoElement = document.getElementById('overlay-video');
         const targetEntity = document.getElementById('target');
 
-        videoElement.addEventListener('loadeddata', () => {
-            console.log('Video is loaded and ready to play');
+        // Ensure video is playable and loaded properly
+        videoElement.addEventListener('canplay', () => {
+            console.log('Video can play');
         });
 
         targetEntity.addEventListener('targetFound', () => {
             console.log('Target detected. Playing video...');
-            videoElement.play().catch((error) => {
+            videoElement.play().then(() => {
+                console.log('Video is playing');
+            }).catch((error) => {
                 console.error('Video play failed:', error);
             });
         });
 
+        // Fallback for user interaction requirement
         window.addEventListener('click', () => {
             videoElement.play().catch((error) => {
-                console.error('Video play failed:', error);
+                console.error('Video play failed due to autoplay policy:', error);
             });
         });
     </script>
