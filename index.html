@@ -1,51 +1,23 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindAR Video Overlay Example</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/MindAR-js/aframe/dist/aframe-mindar.min.css" />
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.js"></script>
-  </head>
-  <body>
-    <!-- AR scene setup -->
-    <a-scene embedded arjs="sourceType: webcam;">
-      
-      <!-- Define the Hiro marker for AR detection -->
-      <a-marker preset="hiro">
-        <!-- Video entity to display on top of the Hiro marker -->
-        <a-video
-          src="video.mp4"
-          width="1.5"
-          height="1"
-          position="0 0 0"
-          rotation="-90 0 0"
-          autoplay="true"
-          loop="true"
-          muted="true"
-          crossorigin="anonymous"
-          playsinline
-        ></a-video>
-      </a-marker>
-      
-      <!-- Camera setup -->
-      <a-entity camera></a-entity>
-    </a-scene>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const videoEl = document.querySelector('a-video');
-    
-        videoEl.addEventListener('loadeddata', () => {
-          console.log('Video loaded and ready to play.');
-          videoEl.components.material.material.map.image.play();  // Attempt to play manually
-        });
-    
-        videoEl.addEventListener('play', () => {
-          console.log('Video is playing.');
-        });
-    
-        videoEl.addEventListener('error', (e) => {
-          console.error('Error during video playback:', e);
-        });
-      });
-    </script>
+    <script src="https://cdn.jsdelivr.net/gh/MindAR-js/aframe/dist/aframe-mindar.min.js"></script>
+</head>
+<body>
+    <a-scene mindar="imageTargetSrc: ./targets.mind; autoStart: true;" vr-mode-ui="enabled: false" embedded>
+        <a-assets>
+            <video id="overlay-video" src="./video.mp4" loop crossorigin="anonymous"></video>
+        </a-assets>
 
-  </body>
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+        <a-entity mindar-image-target="targetIndex: 0">
+            <a-video src="#overlay-video" width="1" height="0.56" position="0 0 0"></a-video>
+        </a-entity>
+    </a-scene>
+</body>
 </html>
