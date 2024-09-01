@@ -16,7 +16,8 @@
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
         <a-entity mindar-image-target="targetIndex: 0" id="target">
-            <a-video src="#overlay-video" width="1" height="0.56" position="0 0 0" autoplay="true"></a-video>
+            <!-- Adjust position, scale, and rotation for proper visibility -->
+            <a-video src="#overlay-video" width="1" height="0.56" position="0 0 0.1" rotation="0 0 0"></a-video>
         </a-entity>
     </a-scene>
 
