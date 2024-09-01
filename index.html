@@ -26,7 +26,8 @@
 <body>
     <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: true;" vr-mode-ui="enabled: false" embedded>
         <a-assets>
-            <video id="overlay-video" src="./video.mp4" loop crossorigin="anonymous" playsinline preload="auto"></video>
+            <!-- Ensure the correct video file path is specified -->
+            <video id="overlay-video" src="./video.mp4" loop crossorigin="anonymous" playsinline muted preload="auto"></video>
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -38,7 +39,6 @@
     <script>
         const videoElement = document.getElementById('overlay-video');
         const targetEntity = document.getElementById('target');
-        let userInteracted = false;
 
         // Function to play the video
         const playVideo = () => {
@@ -50,21 +50,19 @@
             });
         };
 
-        // Listen for user interaction to enable autoplay
-        window.addEventListener('click', () => {
-            if (!userInteracted) {
-                userInteracted = true;
-                playVideo();
-            }
-        });
-
-        // Attempt to play the video when the target is detected
+        // Listen for the target detection
         targetEntity.addEventListener('targetFound', () => {
             console.log('Target detected. Playing video...');
-            if (userInteracted) {
-                playVideo();
-            }
+            playVideo();
         });
+
+        // Play video on user interaction to handle autoplay restrictions
+        window.addEventListener('click', () => {
+            playVideo();
+        });
+
+        // Start loading the video in advance to ensure it is ready to play
+        videoElement.load();
     </script>
 </body>
 </html>
