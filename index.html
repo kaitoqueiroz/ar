@@ -19,12 +19,33 @@
           rotation="-90 0 0"
           autoplay="true"
           loop="true"
-          muted="true">
-        </a-video>
+          muted="true"
+          crossorigin="anonymous"  <!-- Ensure cross-origin compliance -->
+          playsinline  <!-- Ensures the video plays inline on mobile browsers -->
+        ></a-video>
       </a-marker>
       
       <!-- Camera setup -->
       <a-entity camera></a-entity>
     </a-scene>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const videoEl = document.querySelector('a-video');
+    
+        videoEl.addEventListener('loadeddata', () => {
+          console.log('Video loaded and ready to play.');
+          videoEl.components.material.material.map.image.play();  // Attempt to play manually
+        });
+    
+        videoEl.addEventListener('play', () => {
+          console.log('Video is playing.');
+        });
+    
+        videoEl.addEventListener('error', (e) => {
+          console.error('Error during video playback:', e);
+        });
+      });
+    </script>
+
   </body>
 </html>
