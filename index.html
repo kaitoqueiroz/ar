@@ -48,7 +48,7 @@
             <video id="overlay-video" src="./video.mp4" crossorigin="anonymous" playsinline preload="auto" muted></video>
         </a-assets>
 
-        <a-camera position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
+        <a-camera id="camera" position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
 
         <a-entity mindar-image-target="targetIndex: 0" id="target">
             <!-- Video Player properly attached to the target entity -->
@@ -68,6 +68,7 @@
         const instagramButton = document.getElementById('instagram-button');
         const facebookButton = document.getElementById('facebook-button');
         const videoEntity = document.getElementById('overlay-video-entity');
+        const camera = document.getElementById('camera');
 
         // Show the overlay buttons when the AR target is found
         const showOverlay = () => {
@@ -95,10 +96,17 @@
             const videoWorldPosition = new THREE.Vector3();
             videoEntity.object3D.getWorldPosition(videoWorldPosition); // Get the world position of the video
 
-            const screenPosition = videoWorldPosition.project(document.querySelector('a-scene').camera); // Project the position to 2D screen space
+            // Get the camera matrix and project the 3D position to 2D screen coordinates
+            const projectionMatrix = camera.object3D.matrixWorldInverse;
+            const cameraProjectionMatrix = camera.components.camera.camera.projectionMatrix;
 
-            const x = (screenPosition.x + 1) / 2 * window.innerWidth;
-            const y = (-screenPosition.y + 1) / 2 * window.innerHeight;
+            // Project the position into camera space
+            videoWorldPosition.applyMatrix4(projectionMatrix);
+            videoWorldPosition.applyMatrix4(cameraProjectionMatrix);
+
+            // Convert normalized device coordinates (NDC) to screen coordinates
+            const x = (videoWorldPosition.x / videoWorldPosition.w + 1) / 2 * window.innerWidth;
+            const y = (-videoWorldPosition.y / videoWorldPosition.w + 1) / 2 * window.innerHeight;
 
             // Position the buttons relative to the video on the screen
             instagramButton.style.left = `${x - 60}px`; // Adjust to position the button near the video
