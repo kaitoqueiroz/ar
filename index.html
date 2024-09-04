@@ -27,7 +27,7 @@
     <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: true;" vr-mode-ui="enabled: false" embedded>
         <a-assets>
             <!-- Ensure the correct video file path is specified -->
-            <video id="overlay-video" src="./video.mp4" loop crossorigin="anonymous" playsinline preload="auto"></video>
+            <video id="overlay-video" src="./video.mp4" crossorigin="anonymous" playsinline preload="auto"></video>
             
             <a id="instagram" href="https://www.instagram.com/carlitoqueirozjr"><img src="./instagram.png" /></a>
             <a id="facebook" href="https://www.facebook.com/carlitoqueirozjr"><img src="./facebook.png" /></a>
@@ -38,8 +38,8 @@
             <!-- Adjust width, height, scale, and position to fit the pattern -->
             <a-video src="#overlay-video" width="1.1" height="1.5" position="0 0 0.01" rotation="0 0 0" scale="1 1 1"></a-video>
             
-            <a-plane id="instagram-link" src="#instagram" position="0 0 0" height="0.552" width="1" rotation="0 0 0">
-            <a-plane id="facebook-link" src="#facebook" position="0 0 0" height="0.552" width="1" rotation="0 0 0">
+            <a-plane id="instagram-link" src="#instagram" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
+            <a-plane id="facebook-link" src="#facebook" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
         </a-entity>
     </a-scene>
 
