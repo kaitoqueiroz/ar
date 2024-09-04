@@ -36,8 +36,8 @@
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
         <a-entity mindar-image-target="targetIndex: 0" id="target">
-            <a-plane id="instagram-link" class="hidden" src="#instagram" position="-0.6 -0.8 0" height="0.552" width="1" rotation="0 0 0" transparent="true"></a-plane>
-            <a-plane id="facebook-link" class="hidden" src="#facebook" position="0.6 -0.8 0" height="0.552" width="1" rotation="0 0 0" transparent="true"></a-plane>
+            <a-plane id="instagram-link" class="clickable hidden" src="#instagram" position="-0.6 -0.8 0" height="0.552" width="1" rotation="0 0 0" transparent="true"></a-plane>
+            <a-plane id="facebook-link" class="clickable hidden" src="#facebook" position="0.6 -0.8 0" height="0.552" width="1" rotation="0 0 0" transparent="true"></a-plane>
             <a-video src="#overlay-video" width="1.1" height="1.5" position="0 0 0.01" rotation="0 0 0" scale="1 1 1"></a-video>
         </a-entity>
     </a-scene>
@@ -54,7 +54,7 @@
             window.open(url, '_blank');
         };
 
-        // A-Frame event listeners for click events
+        // Add click listeners for A-Frame entities
         facebookButton.addEventListener('click', function () {
             handleButtonClick('https://www.facebook.com/carlitoqueirozjr');
         });
@@ -80,11 +80,6 @@
         // Listen for the target detection
         targetEntity.addEventListener('targetFound', () => {
             console.log('Target detected. Playing video...');
-            playVideo();
-        });
-
-        // Play video on user interaction to handle autoplay restrictions
-        window.addEventListener('click', () => {
             playVideo();
         });
 
