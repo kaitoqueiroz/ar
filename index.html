@@ -21,6 +21,22 @@
             top: 0;
             left: 0;
         }
+        #overlay-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none; /* Hidden by default */
+            pointer-events: none; /* Make sure the overlay container does not block clicks */
+        }
+        .overlay-button {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            pointer-events: all; /* Enable click events on the buttons */
+        }
     </style>
 </head>
 <body>
@@ -37,34 +53,71 @@
         <a-entity mindar-image-target="targetIndex: 0" id="target">
             <!-- Video Player -->
             <a-video id="overlay-video-entity" src="#overlay-video" width="1.1" height="1.5" position="0 0 0.01" rotation="0 0 0" scale="1 1 1"></a-video>
-            
-            <!-- Buttons positioned relative to the video player -->
-            <a-plane id="instagram-button" class="clickable" src="#instagram" position="-0.6 -1 0.02" height="0.3" width="0.3" transparent="true" material="shader: flat"></a-plane>
-            <a-plane id="facebook-button" class="clickable" src="#facebook" position="0.6 -1 0.02" height="0.3" width="0.3" transparent="true" material="shader: flat"></a-plane>
         </a-entity>
     </a-scene>
 
+    <!-- Overlay Container for Buttons -->
+    <div id="overlay-container">
+        <img id="instagram-button" class="overlay-button" src="./instagram.png" />
+        <img id="facebook-button" class="overlay-button" src="./facebook.png" />
+    </div>
+
     <script>
         const videoElement = document.getElementById('overlay-video');
-        const videoEntity = document.getElementById('overlay-video-entity');
+        const overlayContainer = document.getElementById('overlay-container');
         const instagramButton = document.getElementById('instagram-button');
         const facebookButton = document.getElementById('facebook-button');
+        const videoEntity = document.getElementById('overlay-video-entity');
 
-        // Function to handle button clicks
-        const handleButtonClick = (url) => {
-            console.log(`Opening URL: ${url}`);
-            window.open(url, '_blank');
+        // Show the overlay buttons when the AR target is found
+        const showOverlay = () => {
+            overlayContainer.style.display = 'block';
         };
 
-        // Set up event listeners for button clicks
+        // Hide the overlay buttons
+        const hideOverlay = () => {
+            overlayContainer.style.display = 'none';
+        };
+
+        // Event listeners for button clicks
         instagramButton.addEventListener('click', () => {
             console.log('Instagram button clicked');
-            handleButtonClick('https://www.instagram.com/carlitoqueirozjr');
+            window.open('https://www.instagram.com/carlitoqueirozjr', '_blank');
         });
 
         facebookButton.addEventListener('click', () => {
             console.log('Facebook button clicked');
-            handleButtonClick('https://www.facebook.com/carlitoqueirozjr');
+            window.open('https://www.facebook.com/carlitoqueirozjr', '_blank');
+        });
+
+        // Function to update the overlay position to follow the video
+        const updateOverlayPosition = () => {
+            const videoWorldPosition = new THREE.Vector3();
+            videoEntity.object3D.getWorldPosition(videoWorldPosition); // Get the world position of the video
+
+            const screenPosition = videoWorldPosition.project(document.querySelector('a-scene').camera); // Project the position to 2D screen space
+
+            const x = (screenPosition.x + 1) / 2 * window.innerWidth;
+            const y = (-screenPosition.y + 1) / 2 * window.innerHeight;
+
+            // Position the buttons relative to the video on the screen
+            instagramButton.style.left = `${x - 60}px`; // Adjust to position the button near the video
+            instagramButton.style.top = `${y + 100}px`; // Adjust to position the button near the video
+
+            facebookButton.style.left = `${x + 60}px`; // Adjust to position the button near the video
+            facebookButton.style.top = `${y + 100}px`; // Adjust to position the button near the video
+        };
+
+        // Listen for MindAR events for when the target is detected
+        document.querySelector('[mindar-image]').addEventListener('targetFound', () => {
+            console.log('Target found');
+            showOverlay(); // Show the overlay buttons
+            playVideo(); // Play the video when target is found
+        });
+
+        document.querySelector('[mindar-image]').addEventListener('targetLost', () => {
+            console.log('Target lost');
+            hideOverlay(); // Hide the overlay buttons when target is lost
         });
 
         // Play the video when the target is found
@@ -72,26 +125,14 @@
             videoElement.play().then(() => {
                 console.log('Video is playing');
                 videoElement.muted = false; // Unmute video
-
-                // Make buttons visible
-                instagramButton.setAttribute('visible', true);
-                facebookButton.setAttribute('visible', true);
             }).catch((error) => {
                 console.error('Video play failed:', error);
             });
         };
 
-        // Listen for MindAR events for when the target is detected
-        document.querySelector('[mindar-image]').addEventListener('targetFound', () => {
-            console.log('Target found');
-            playVideo(); // Play video when target is found
-        });
-
-        document.querySelector('[mindar-image]').addEventListener('targetLost', () => {
-            console.log('Target lost');
-            // Hide buttons when target is lost
-            instagramButton.setAttribute('visible', false);
-            facebookButton.setAttribute('visible', false);
+        // Update overlay positions on each frame to follow the video player
+        document.querySelector('a-scene').addEventListener('renderstart', () => {
+            document.querySelector('a-scene').renderer.setAnimationLoop(updateOverlayPosition);
         });
 
         // Preload the video
