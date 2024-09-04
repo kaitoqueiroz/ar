@@ -72,13 +72,6 @@
         // Show the overlay buttons when the AR target is found
         const showOverlay = () => {
             overlayContainer.style.display = 'block';
-
-            // Position the buttons to the right of the video
-            instagramButton.style.left = '60%'; // Example positioning
-            instagramButton.style.top = '40%'; // Example positioning
-
-            facebookButton.style.left = '70%'; // Example positioning next to Instagram
-            facebookButton.style.top = '40%'; // Align vertically with the Instagram button
         };
 
         // Hide the overlay buttons
@@ -96,6 +89,33 @@
             console.log('Facebook button clicked');
             window.open('https://www.facebook.com/carlitoqueirozjr', '_blank');
         });
+
+        // Function to update the overlay position to follow the video
+        const updateOverlayPosition = () => {
+            const videoWorldPosition = new THREE.Vector3();
+            videoEntity.object3D.getWorldPosition(videoWorldPosition); // Get the world position of the video
+
+            const cameraEl = document.querySelector('a-camera'); // Ensure we have the correct camera entity
+            const cameraObj = cameraEl.getObject3D('camera'); // Access the Three.js camera object
+
+            if (cameraObj) {
+                // Convert the world position to screen space
+                const screenPosition = videoWorldPosition.clone().project(cameraObj);
+
+                // Convert normalized device coordinates (NDC) to screen coordinates
+                const x = (screenPosition.x * 0.5 + 0.5) * window.innerWidth;
+                const y = (-screenPosition.y * 0.5 + 0.5) * window.innerHeight;
+
+                // Align the buttons to the right of the video
+                instagramButton.style.left = `${x + 20}px`;
+                instagramButton.style.top = `${y}px`;
+
+                facebookButton.style.left = `${x + 130}px`; // Align next to the Instagram button
+                facebookButton.style.top = `${y}px`;
+            } else {
+                console.error('Camera object not found!');
+            }
+        };
 
         // Listen for MindAR events for when the target is detected
         document.querySelector('[mindar-image]').addEventListener('targetFound', () => {
@@ -122,6 +142,11 @@
                 }, { once: true });
             });
         };
+
+        // Update overlay positions on each frame to follow the video player
+        document.querySelector('a-scene').addEventListener('renderstart', () => {
+            document.querySelector('a-scene').renderer.setAnimationLoop(updateOverlayPosition);
+        });
 
         // Preload the video
         videoElement.load();
