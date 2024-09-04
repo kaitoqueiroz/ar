@@ -75,16 +75,6 @@
         const instagramButton = document.getElementById('instagram-button');
         const facebookButton = document.getElementById('facebook-button');
 
-        // Show the overlay buttons when the AR target is found
-        const showOverlay = () => {
-            overlayContainer.style.display = 'grid';
-        };
-
-        // Hide the overlay buttons
-        const hideOverlay = () => {
-            overlayContainer.style.display = 'none';
-        };
-
         // Event listeners for button clicks
         instagramButton.addEventListener('click', () => {
             console.log('Instagram button clicked');
@@ -99,13 +89,11 @@
         // Listen for MindAR events for when the target is detected
         document.querySelector('[mindar-image]').addEventListener('targetFound', () => {
             console.log('Target found');
-            showOverlay(); // Show the overlay buttons
             playVideo(); // Play the video when target is found
         });
 
         document.querySelector('[mindar-image]').addEventListener('targetLost', () => {
             console.log('Target lost');
-            hideOverlay(); // Hide the overlay buttons when target is lost
         });
 
         // Play the video when the target is found
