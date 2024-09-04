@@ -28,7 +28,7 @@
             width: 100%;
             height: 100%;
             display: none; /* Hidden by default */
-            pointer-events: none; /* Make sure the overlay container does not block clicks */
+            pointer-events: none; /* Ensure the overlay container does not block clicks */
         }
         .overlay-button {
             position: absolute;
@@ -52,7 +52,7 @@
 
         <a-entity mindar-image-target="targetIndex: 0" id="target">
             <!-- Video Player properly attached to the target entity -->
-            <a-video id="overlay-video-entity" src="#overlay-video" width="1" height="0.75" position="0 0 0" material="shader: flat; side: double; transparent: true;"></a-video>
+            <a-video id="overlay-video-entity" src="#overlay-video" width="1" height="0.75" position="0 0 0" material="shader: flat; side: double; transparent: true;" autoplay loop></a-video>
         </a-entity>
     </a-scene>
 
@@ -68,7 +68,6 @@
         const instagramButton = document.getElementById('instagram-button');
         const facebookButton = document.getElementById('facebook-button');
         const videoEntity = document.getElementById('overlay-video-entity');
-        const camera = document.getElementById('camera');
 
         // Show the overlay buttons when the AR target is found
         const showOverlay = () => {
@@ -90,33 +89,6 @@
             console.log('Facebook button clicked');
             window.open('https://www.facebook.com/carlitoqueirozjr', '_blank');
         });
-
-        // Function to update the overlay position to follow the video
-        const updateOverlayPosition = () => {
-            const videoWorldPosition = new THREE.Vector3();
-            videoEntity.object3D.getWorldPosition(videoWorldPosition); // Get the world position of the video
-
-            const cameraEl = document.querySelector('a-camera'); // Ensure we have the correct camera entity
-            const cameraObj = cameraEl.getObject3D('camera'); // Access the Three.js camera object
-
-            if (cameraObj) {
-                // Project the position from world space to screen space
-                const screenPosition = videoWorldPosition.project(cameraObj);
-
-                // Convert normalized device coordinates (NDC) to screen coordinates
-                const x = (screenPosition.x + 1) / 2 * window.innerWidth;
-                const y = (-screenPosition.y + 1) / 2 * window.innerHeight;
-
-                // Position the buttons relative to the video on the screen
-                instagramButton.style.left = `${x - 60}px`; // Adjust to position the button near the video
-                instagramButton.style.top = `${y + 100}px`; // Adjust to position the button near the video
-
-                facebookButton.style.left = `${x + 60}px`; // Adjust to position the button near the video
-                facebookButton.style.top = `${y + 100}px`; // Adjust to position the button near the video
-            } else {
-                console.error('Camera object not found!');
-            }
-        };
 
         // Listen for MindAR events for when the target is detected
         document.querySelector('[mindar-image]').addEventListener('targetFound', () => {
@@ -143,11 +115,6 @@
                 }, { once: true });
             });
         };
-
-        // Update overlay positions on each frame to follow the video player
-        document.querySelector('a-scene').addEventListener('renderstart', () => {
-            document.querySelector('a-scene').renderer.setAnimationLoop(updateOverlayPosition);
-        });
 
         // Preload the video
         videoElement.load();
