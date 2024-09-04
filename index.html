@@ -29,8 +29,8 @@
             <!-- Ensure the correct video file path is specified -->
             <video id="overlay-video" src="./video.mp4" crossorigin="anonymous" playsinline preload="auto"></video>
             
-            <a id="instagram" href="https://www.instagram.com/carlitoqueirozjr"><img src="./instagram.png" /></a>
-            <a id="facebook" href="https://www.facebook.com/carlitoqueirozjr"><img src="./facebook.png" /></a>
+            <img id="instagram" src="./instagram.png" />
+            <img id="facebook" src="./facebook.png" />
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -48,6 +48,13 @@
         const targetEntity = document.getElementById('target');
         const facebookButton = document.getElementById('facebook-link');
         const instagramButton = document.getElementById('instagram-link');
+	
+        facebookButton.addEventListener("click", event => {
+            window.location.href = "https://www.facebook.com/carlitoqueirozjr"
+        });
+        instagramButton.addEventListener("click", event => {
+            window.location.href = "https://www.instagram.com/carlitoqueirozjr"
+        });
 
         // Function to play the video
         const playVideo = () => {
