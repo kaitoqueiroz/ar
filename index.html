@@ -99,19 +99,19 @@
             const cameraObj = cameraEl.getObject3D('camera'); // Access the Three.js camera object
 
             if (cameraObj) {
-                // Project the position from world space to screen space
-                const screenPosition = videoWorldPosition.clone().project(cameraObj);
+                // Convert the world position to screen space
+                videoWorldPosition.project(cameraObj);
 
                 // Convert normalized device coordinates (NDC) to screen coordinates
-                const x = (screenPosition.x + 1) / 2 * window.innerWidth;
-                const y = (-screenPosition.y + 1) / 2 * window.innerHeight;
+                const x = (videoWorldPosition.x * 0.5 + 0.5) * window.innerWidth;
+                const y = (-videoWorldPosition.y * 0.5 + 0.5) * window.innerHeight;
 
-                // Position the buttons to the right of the video on the screen
-                instagramButton.style.left = `${x + 20}px`; // Position the button to the right of the video
-                instagramButton.style.top = `${y - 50}px`; // Align vertically with the video
+                // Align the buttons to the right of the video
+                instagramButton.style.left = `${x + 50}px`;
+                instagramButton.style.top = `${y - 50}px`;
 
-                facebookButton.style.left = `${x + 130}px`; // Adjust to position the second button next to the first
-                facebookButton.style.top = `${y - 50}px`; // Align vertically with the video
+                facebookButton.style.left = `${x + 160}px`; // Align next to the Instagram button
+                facebookButton.style.top = `${y - 50}px`;
             } else {
                 console.error('Camera object not found!');
             }
