@@ -51,14 +51,14 @@
         <a-assets>
             <img id="instagram" src="./instagram.png" />
             <img id="facebook" src="./facebook.png" />
-            <video id="overlay-video" src="./video.mp4" crossorigin="anonymous" playsinline preload="auto" muted></video>
+            <video id="overlay-video" src="./video.mp4" loop crossorigin="anonymous" playsinline preload="auto"></video>
         </a-assets>
 
         <a-camera id="camera" position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
 
         <a-entity mindar-image-target="targetIndex: 0" id="target">
             <!-- Video Player properly attached to the target entity -->
-            <a-video id="overlay-video-entity" src="#overlay-video" width="1.1" height="1.5" position="0 0 0" material="shader: flat; side: double; transparent: true;" autoplay loop></a-video>
+            <a-video src="#overlay-video" width="1.1" height="1.5" position="0 0 0.01" rotation="0 0 0" scale="1 1 1"></a-video>
         </a-entity>
     </a-scene>
 
