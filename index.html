@@ -96,24 +96,26 @@
             const videoWorldPosition = new THREE.Vector3();
             videoEntity.object3D.getWorldPosition(videoWorldPosition); // Get the world position of the video
 
-            // Get the camera matrix and project the 3D position to 2D screen coordinates
-            const projectionMatrix = camera.object3D.matrixWorldInverse;
-            const cameraProjectionMatrix = camera.components.camera.camera.projectionMatrix;
+            const cameraEl = document.querySelector('a-camera'); // Ensure we have the correct camera entity
+            const cameraObj = cameraEl.getObject3D('camera'); // Access the Three.js camera object
 
-            // Project the position into camera space
-            videoWorldPosition.applyMatrix4(projectionMatrix);
-            videoWorldPosition.applyMatrix4(cameraProjectionMatrix);
+            if (cameraObj) {
+                // Project the position from world space to screen space
+                const screenPosition = videoWorldPosition.project(cameraObj);
 
-            // Convert normalized device coordinates (NDC) to screen coordinates
-            const x = (videoWorldPosition.x / videoWorldPosition.w + 1) / 2 * window.innerWidth;
-            const y = (-videoWorldPosition.y / videoWorldPosition.w + 1) / 2 * window.innerHeight;
+                // Convert normalized device coordinates (NDC) to screen coordinates
+                const x = (screenPosition.x + 1) / 2 * window.innerWidth;
+                const y = (-screenPosition.y + 1) / 2 * window.innerHeight;
 
-            // Position the buttons relative to the video on the screen
-            instagramButton.style.left = `${x - 60}px`; // Adjust to position the button near the video
-            instagramButton.style.top = `${y + 100}px`; // Adjust to position the button near the video
+                // Position the buttons relative to the video on the screen
+                instagramButton.style.left = `${x - 60}px`; // Adjust to position the button near the video
+                instagramButton.style.top = `${y + 100}px`; // Adjust to position the button near the video
 
-            facebookButton.style.left = `${x + 60}px`; // Adjust to position the button near the video
-            facebookButton.style.top = `${y + 100}px`; // Adjust to position the button near the video
+                facebookButton.style.left = `${x + 60}px`; // Adjust to position the button near the video
+                facebookButton.style.top = `${y + 100}px`; // Adjust to position the button near the video
+            } else {
+                console.error('Camera object not found!');
+            }
         };
 
         // Listen for MindAR events for when the target is detected
