@@ -47,15 +47,21 @@
         const targetEntity = document.getElementById('target');
         const facebookButton = document.getElementById('facebook-link');
         const instagramButton = document.getElementById('instagram-link');
-        
+
         // Function to handle clicks and redirect
         const handleButtonClick = (url) => {
+            // Open the link in a new tab
             window.open(url, '_blank');
         };
 
-        // Add click listeners using A-Frame cursor component
-        facebookButton.addEventListener("click", () => handleButtonClick("https://www.facebook.com/carlitoqueirozjr"));
-        instagramButton.addEventListener("click", () => handleButtonClick("https://www.instagram.com/carlitoqueirozjr"));
+        // A-Frame event listeners for click events
+        facebookButton.addEventListener('click', function () {
+            handleButtonClick('https://www.facebook.com/carlitoqueirozjr');
+        });
+
+        instagramButton.addEventListener('click', function () {
+            handleButtonClick('https://www.instagram.com/carlitoqueirozjr');
+        });
 
         // Function to play the video
         const playVideo = () => {
@@ -74,6 +80,11 @@
         // Listen for the target detection
         targetEntity.addEventListener('targetFound', () => {
             console.log('Target detected. Playing video...');
+            playVideo();
+        });
+
+        // Play video on user interaction to handle autoplay restrictions
+        window.addEventListener('click', () => {
             playVideo();
         });
 
