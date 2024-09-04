@@ -21,70 +21,80 @@
             top: 0;
             left: 0;
         }
+        #overlay-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+        }
+        .overlay-button {
+            width: 100px;
+            height: 100px;
+            margin: 10px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <!-- AR Scene Setup -->
     <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: true;" vr-mode-ui="enabled: false" embedded>
         <a-assets>
             <img id="instagram" src="./instagram.png" />
             <img id="facebook" src="./facebook.png" />
-            <video id="overlay-video" src="./video.mp4" crossorigin="anonymous" playsinline preload="auto"></video>
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
 
-        <a-entity mindar-image-target="targetIndex: 0" id="target">
-            <!-- Make entities interactive with click event listeners -->
-            <a-plane id="instagram-link" class="clickable" src="#instagram" position="-0.6 -0.8 0" height="0.552" width="1" rotation="0 0 0" transparent="true"></a-plane>
-            <a-plane id="facebook-link" class="clickable" src="#facebook" position="0.6 -0.8 0" height="0.552" width="1" rotation="0 0 0" transparent="true"></a-plane>
-            <a-video src="#overlay-video" width="1.1" height="1.5" position="0 0 0.01" rotation="0 0 0" scale="1 1 1"></a-video>
-        </a-entity>
+        <a-entity mindar-image-target="targetIndex: 0" id="target"></a-entity>
     </a-scene>
 
-    <script>
-        const videoElement = document.getElementById('overlay-video');
-        const facebookButton = document.getElementById('facebook-link');
-        const instagramButton = document.getElementById('instagram-link');
+    <!-- Overlay Container for Buttons -->
+    <div id="overlay-container">
+        <img id="instagram-button" class="overlay-button" src="./instagram.png" />
+        <img id="facebook-button" class="overlay-button" src="./facebook.png" />
+    </div>
 
-        // Function to handle button clicks
-        const handleButtonClick = (url) => {
-            console.log(`Opening URL: ${url}`);
-            window.open(url, '_blank');
+    <script>
+        // Elements for overlay
+        const overlayContainer = document.getElementById('overlay-container');
+        const instagramButton = document.getElementById('instagram-button');
+        const facebookButton = document.getElementById('facebook-button');
+
+        // Show the overlay buttons when the AR target is found
+        const showOverlay = () => {
+            overlayContainer.style.display = 'flex';
         };
 
-        // Set up event listeners for click events
-        facebookButton.addEventListener('click', () => {
-            console.log('Facebook button clicked');
-            handleButtonClick('https://www.facebook.com/carlitoqueirozjr');
-        });
+        // Hide the overlay buttons
+        const hideOverlay = () => {
+            overlayContainer.style.display = 'none';
+        };
 
+        // Event listeners for button clicks
         instagramButton.addEventListener('click', () => {
             console.log('Instagram button clicked');
-            handleButtonClick('https://www.instagram.com/carlitoqueirozjr');
+            window.open('https://www.instagram.com/carlitoqueirozjr', '_blank');
         });
 
-        // Play the video when the target is found
-        const playVideo = () => {
-            videoElement.play().then(() => {
-                console.log('Video is playing');
-                videoElement.muted = false; // Unmute video
+        facebookButton.addEventListener('click', () => {
+            console.log('Facebook button clicked');
+            window.open('https://www.facebook.com/carlitoqueirozjr', '_blank');
+        });
 
-                // Make buttons visible
-                facebookButton.setAttribute('visible', true);
-                instagramButton.setAttribute('visible', true);
-            }).catch((error) => {
-                console.error('Video play failed:', error);
-            });
-        };
-
-        // Listen for MindAR events for when the target is detected
+        // Event listener for MindAR's target detection
         document.querySelector('[mindar-image]').addEventListener('targetFound', () => {
             console.log('Target found');
-            playVideo();
+            showOverlay(); // Show the overlay buttons
         });
 
-        // Preload the video
-        videoElement.load();
+        document.querySelector('[mindar-image]').addEventListener('targetLost', () => {
+            console.log('Target lost');
+            hideOverlay(); // Hide the overlay buttons when target is lost
+        });
     </script>
 </body>
 </html>
