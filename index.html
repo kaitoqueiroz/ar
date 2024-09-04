@@ -53,14 +53,20 @@
 
         // Function to handle clicks and redirect
         const handleButtonClick = (url) => {
-            console.log(url)
+            console.log(`Button clicked. Redirecting to: ${url}`);
             window.open(url, '_blank');
         };
 
         // Attach A-Frame event listeners after the scene is loaded
         document.querySelector('a-scene').addEventListener('loaded', () => {
-            facebookButton.addEventListener('click', () => handleButtonClick('https://www.facebook.com/carlitoqueirozjr'));
-            instagramButton.addEventListener('click', () => handleButtonClick('https://www.instagram.com/carlitoqueirozjr'));
+            facebookButton.addEventListener('click', () => {
+                console.log('Facebook button clicked');
+                handleButtonClick('https://www.facebook.com/carlitoqueirozjr');
+            });
+            instagramButton.addEventListener('click', () => {
+                console.log('Instagram button clicked');
+                handleButtonClick('https://www.instagram.com/carlitoqueirozjr');
+            });
         });
 
         // Function to play the video
