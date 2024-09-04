@@ -38,15 +38,9 @@
         <a-camera position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
 
         <a-entity mindar-image-target="targetIndex: 0" id="target">
-            <!-- Add clickable functionality directly to the entities -->
-            <a-plane id="instagram-link" class="hidden" src="#instagram" position="-0.6 -0.8 0" height="0.552" width="1" rotation="0 0 0" transparent="true"
-                event-set__click="_event: click; _target: #instagram-link; visible: false; 
-                _target: window; window.location: https://www.instagram.com/carlitoqueirozjr">
-            </a-plane>
-            <a-plane id="facebook-link" class="hidden" src="#facebook" position="0.6 -0.8 0" height="0.552" width="1" rotation="0 0 0" transparent="true"
-                event-set__click="_event: click; _target: #facebook-link; visible: false; 
-                _target: window; window.location: https://www.facebook.com/carlitoqueirozjr">
-            </a-plane>
+            <!-- Entities are clickable and use aframe's event listeners -->
+            <a-plane id="instagram-link" class="hidden" src="#instagram" position="-0.6 -0.8 0" height="0.552" width="1" rotation="0 0 0" transparent="true"></a-plane>
+            <a-plane id="facebook-link" class="hidden" src="#facebook" position="0.6 -0.8 0" height="0.552" width="1" rotation="0 0 0" transparent="true"></a-plane>
             <a-video src="#overlay-video" width="1.1" height="1.5" position="0 0 0.01" rotation="0 0 0" scale="1 1 1"></a-video>
         </a-entity>
     </a-scene>
@@ -56,6 +50,17 @@
         const targetEntity = document.getElementById('target');
         const facebookButton = document.getElementById('facebook-link');
         const instagramButton = document.getElementById('instagram-link');
+
+        // Function to handle clicks and redirect
+        const handleButtonClick = (url) => {
+            window.open(url, '_blank');
+        };
+
+        // Attach A-Frame event listeners after the scene is loaded
+        document.querySelector('a-scene').addEventListener('loaded', () => {
+            facebookButton.addEventListener('click', () => handleButtonClick('https://www.facebook.com/carlitoqueirozjr'));
+            instagramButton.addEventListener('click', () => handleButtonClick('https://www.instagram.com/carlitoqueirozjr'));
+        });
 
         // Function to play the video
         const playVideo = () => {
