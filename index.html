@@ -45,14 +45,14 @@
         <a-assets>
             <img id="instagram" src="./instagram.png" />
             <img id="facebook" src="./facebook.png" />
-            <video id="overlay-video" src="./video.mp4" crossorigin="anonymous" playsinline preload="auto" loop muted></video>
+            <video id="overlay-video" src="./video.mp4" crossorigin="anonymous" playsinline preload="auto" muted></video>
         </a-assets>
 
         <a-camera position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
 
         <a-entity mindar-image-target="targetIndex: 0" id="target">
-            <!-- Video Player with corrected attributes -->
-            <a-video id="overlay-video-entity" src="#overlay-video" width="1.1" height="1.5" position="0 0 0.01" rotation="0 0 0" scale="1 1 1" autoplay="true" loop="true" crossorigin="anonymous"></a-video>
+            <!-- Video Player -->
+            <a-video id="overlay-video-entity" src="#overlay-video" width="1.1" height="1.5" position="0 0 0.01" rotation="0 0 0" scale="1 1 1"></a-video>
         </a-entity>
     </a-scene>
 
@@ -124,8 +124,13 @@
         const playVideo = () => {
             videoElement.play().then(() => {
                 console.log('Video is playing');
+                videoElement.muted = false; // Unmute video after playback starts
             }).catch((error) => {
                 console.error('Video play failed:', error);
+                // Request user interaction to play video if autoplay fails
+                document.body.addEventListener('click', () => {
+                    videoElement.play();
+                }, { once: true });
             });
         };
 
