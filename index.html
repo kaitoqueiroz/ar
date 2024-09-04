@@ -65,31 +65,17 @@
     <!-- Overlay Container for Buttons -->
     <div id="overlay-container">
         <div style="margin: auto;">Siga:</div>
-        <img id="instagram-button" class="overlay-button" src="./instagram.png" />
-        <img id="facebook-button" class="overlay-button" src="./facebook.png" />
+        <a href="https://www.instagram.com/carlitoqueirozjr" target="_blank">
+            <img id="instagram-button" class="overlay-button" src="./instagram.png" />
+        </a>
+        <a href="https://www.facebook.com/carlitoqueirozjr" target="_blank">
+            <img id="facebook-button" class="overlay-button" src="./facebook.png" />
+        </a>
     </div>
 
     <script>
         const targetElement = document.getElementById('target');
         const videoElement = document.getElementById('overlay-video');
-        const overlayContainer = document.getElementById('overlay-container');
-        const instagramButton = document.getElementById('instagram-button');
-        const facebookButton = document.getElementById('facebook-button');
-
-        // Event listeners for button clicks
-        instagramButton.addEventListener('click', () => {
-            console.log('Instagram button clicked');
-            window.open('https://www.instagram.com/carlitoqueirozjr', '_blank');
-        });
-
-        facebookButton.addEventListener('click', () => {
-            console.log('Facebook button clicked');
-            window.open('https://www.facebook.com/carlitoqueirozjr', '_blank');
-        });
-
-        targetElement.addEventListener('targetLost', () => {
-            console.log('Target lost');
-        });
 
         const playVideo = () => {
             videoElement.play().then(() => {
@@ -108,7 +94,6 @@
 
         // Play video on user interaction to handle autoplay restrictions
         window.addEventListener('click', (event) => {
-            event.preventDefault();
             playVideo();
         });
 
