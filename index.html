@@ -32,6 +32,9 @@
         }
         .overlay-button {
             position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
             width: 50px;
             height: 50px;
             cursor: pointer;
@@ -71,13 +74,6 @@
         // Show the overlay buttons when the AR target is found
         const showOverlay = () => {
             overlayContainer.style.display = 'block';
-
-            // Position buttons relative to a fixed point on the screen
-            instagramButton.style.left = `10px`; // Align to the right of the center of the screen
-            instagramButton.style.top = `10px`;
-
-            facebookButton.style.left = `10px`; // Align next to the Instagram button
-            facebookButton.style.top = `70px`;
         };
 
         // Hide the overlay buttons
@@ -121,6 +117,11 @@
                 }, { once: true });
             });
         };
+
+        // Play video on user interaction to handle autoplay restrictions
+        window.addEventListener('click', () => {
+            playVideo();
+        });
 
         // Preload the video
         videoElement.load();
