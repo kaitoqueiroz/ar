@@ -70,6 +70,7 @@
     </div>
 
     <script>
+        const targetElement = document.getElementById('target');
         const videoElement = document.getElementById('overlay-video');
         const overlayContainer = document.getElementById('overlay-container');
         const instagramButton = document.getElementById('instagram-button');
@@ -87,12 +88,12 @@
         });
 
         // Listen for MindAR events for when the target is detected
-        document.querySelector('[mindar-image]').addEventListener('targetFound', () => {
+        targetElement.addEventListener('targetFound', () => {
             console.log('Target found');
             playVideo(); // Play the video when target is found
         });
 
-        document.querySelector('[mindar-image]').addEventListener('targetLost', () => {
+        targetElement.addEventListener('targetLost', () => {
             console.log('Target lost');
         });
 
@@ -111,7 +112,8 @@
         };
 
         // Play video on user interaction to handle autoplay restrictions
-        window.addEventListener('click', () => {
+        window.addEventListener('click', (event) => {
+            event.preventDefault();
             playVideo();
         });
 
