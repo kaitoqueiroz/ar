@@ -126,8 +126,13 @@
             playIcon.style.display = 'none'; // Hide the play icon when target is lost
         });
 
+        videoElement.onerror = () => {
+            alert(videoElement.error.message)
+        };
+
         // Ensure that video plays on first user interaction
         window.addEventListener('click', () => {
+            videoElement.muted = false;
             if (!videoPlayed) {
                 playVideo();
             }
