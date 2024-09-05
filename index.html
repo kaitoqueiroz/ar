@@ -63,7 +63,7 @@
             <img id="instagram" src="./instagram.png" />
             <img id="facebook" src="./facebook.png" />
             <!-- Ensure video is muted and playsinline -->
-            <video id="overlay-video" src="./video.mp4" loop muted crossorigin="anonymous" playsinline preload="auto"></video>
+            <video id="overlay-video" src="./video.mp4" loop muted autoplay crossorigin="anonymous" playsinline preload="auto"></video>
         </a-assets>
 
         <a-camera id="camera" position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
@@ -117,9 +117,10 @@
             playVideo(); // Attempt to play the video automatically when target is found
         });
 
-        // Hide play button when target is lost
+        // Hide play button and pause video when target is lost
         sceneEl.addEventListener('targetLost', () => {
             console.log('Target lost');
+            videoElement.pause(); // Pause the video when target is lost
             playIcon.style.display = 'none'; // Hide the play icon when target is lost
         });
 
