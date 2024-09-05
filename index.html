@@ -43,6 +43,34 @@
             cursor: pointer;
             pointer-events: all;
         }
+        #activate-camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+        }
+        #activate-camera-button {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        #activate-camera-button img {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 10px;
+        }
         #play-icon {
             position: absolute;
             top: 50%;
@@ -85,29 +113,38 @@
         </a>
     </div>
 
+    <!-- Black Screen Overlay with Button -->
+    <div id="activate-camera-overlay">
+        <button id="activate-camera-button">
+            <img src="./camera-icon.png" alt="Camera Icon"/>
+            Ativar Câmera
+        </button>
+    </div>
+
     <script>
         const sceneEl = document.querySelector('a-scene');
         const videoElement = document.getElementById('overlay-video');
+        const cameraOverlay = document.getElementById('activate-camera-overlay');
+        const activateCameraButton = document.getElementById('activate-camera-button');
         let arSystem;
+
         sceneEl.addEventListener('loaded', function () {
             arSystem = sceneEl.systems["mindar-image-system"];
-            console.log('ready')
+            console.log('ready');
         });
-        let userInteracted = false;
 
         const playVideo = async () => {
             try {
                 await videoElement.play();
                 videoElement.muted = false;
             } catch (err) {
-                console.log(err)
+                console.log(err);
             }
         };
 
         // Listen for when a target is found
         sceneEl.addEventListener('targetFound', async () => {
             console.log('Target found');
-            playIcon.style.display = 'block'; // Hide the play icon when target is lost
             await playVideo(); // Attempt to play the video automatically when target is found
         });
 
@@ -115,16 +152,16 @@
         sceneEl.addEventListener('targetLost', () => {
             console.log('Target lost');
             videoElement.pause(); // Pause the video when target is lost
-            playIcon.style.display = 'none'; // Hide the play icon when target is lost
         });
 
         videoElement.onerror = () => {
-            alert(videoElement.error.message)
+            alert(videoElement.error.message);
         };
 
-        // Ensure that video plays on first user interaction
-        document.body.addEventListener('click', () => {
-            userInteracted = true
+        // Activate the camera and hide the overlay
+        activateCameraButton.addEventListener('click', () => {
+            cameraOverlay.style.display = 'none';
+            arSystem.start();
         });
     </script>
 </body>
