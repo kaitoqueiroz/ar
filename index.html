@@ -102,6 +102,7 @@
                 playIcon.style.display = 'none'; // Hide the play icon after video starts
             }).catch((error) => {
                 console.error('Video play failed:', error);
+                playIcon.style.display = 'block'; // Show the play icon if video failed to play automatically
             });
         };
 
@@ -113,9 +114,13 @@
         // Listen for when a target is found
         sceneEl.addEventListener('targetFound', () => {
             console.log('Target found');
-            if (!videoPlayed) {
-                playIcon.style.display = 'block'; // Show play icon when target is found
-            }
+            playVideo(); // Attempt to play the video automatically when target is found
+        });
+
+        // Hide play button when target is lost
+        sceneEl.addEventListener('targetLost', () => {
+            console.log('Target lost');
+            playIcon.style.display = 'none'; // Hide the play icon when target is lost
         });
 
         // Preload the video
