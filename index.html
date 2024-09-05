@@ -63,7 +63,7 @@
             <img id="instagram" src="./instagram.png" />
             <img id="facebook" src="./facebook.png" />
             <!-- Ensure video is muted and playsinline -->
-            <video id="overlay-video" src="./video.mp4" loop muted autoplay crossorigin="anonymous" playsinline preload="auto"></video>
+            <video id="overlay-video" src="./video.mp4" loop muted crossorigin="anonymous" playsinline></video>
         </a-assets>
 
         <a-camera id="camera" position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
@@ -101,7 +101,7 @@
                 videoPlayed = true;
                 playIcon.style.display = 'none'; // Hide the play icon after video starts
             }).catch((error) => {
-                console.error('Video play failed:', error);
+                alert(error);
                 playIcon.style.display = 'block'; // Show the play icon if video failed to play automatically
             });
         };
@@ -109,6 +109,7 @@
         // Listen for when MindAR is ready
         sceneEl.addEventListener('arReady', () => {
             console.log('AR is ready');
+            playIcon.style.display = 'block';
         });
 
         // Listen for when a target is found
