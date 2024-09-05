@@ -43,10 +43,16 @@
             cursor: pointer;
             pointer-events: all;
         }
-        #play-button {
-            padding: 5px 10px;
+        #play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 50px;
+            color: white;
             cursor: pointer;
-            pointer-events: all;
+            display: none; /* Hidden by default */
+            z-index: 10;
         }
     </style>
 </head>
@@ -71,8 +77,6 @@
     <!-- Overlay Container for Buttons -->
     <div id="overlay-container">
         <div style="margin: auto;">Siga:</div>
-        <!-- Play button for user interaction -->
-        <button id="play-button" style="display: none;">Play Video</button>
         <a href="https://www.instagram.com/carlitoqueirozjr" target="_blank">
             <img id="instagram-button" class="overlay-button" src="./instagram.png" />
         </a>
@@ -81,10 +85,13 @@
         </a>
     </div>
 
+    <!-- Play Icon Overlay -->
+    <div id="play-icon" onclick="playVideo()">&#9658;</div> <!-- Unicode for play icon -->
+
     <script>
         const sceneEl = document.querySelector('a-scene');
         const videoElement = document.getElementById('overlay-video');
-        const playButton = document.getElementById('play-button');
+        const playIcon = document.getElementById('play-icon');
         let videoPlayed = false;
 
         const playVideo = () => {
@@ -92,7 +99,7 @@
                 console.log('Video is playing');
                 videoElement.muted = false; // Unmute the video after it starts playing
                 videoPlayed = true;
-                playButton.style.display = 'none'; // Hide the play button after video starts
+                playIcon.style.display = 'none'; // Hide the play icon after video starts
             }).catch((error) => {
                 console.error('Video play failed:', error);
             });
@@ -107,13 +114,8 @@
         sceneEl.addEventListener('targetFound', () => {
             console.log('Target found');
             if (!videoPlayed) {
-                playButton.style.display = 'block'; // Show play button when target is found
+                playIcon.style.display = 'block'; // Show play icon when target is found
             }
-        });
-
-        // Play video on button click
-        playButton.addEventListener('click', () => {
-            playVideo(); // Play the video on button click
         });
 
         // Preload the video
