@@ -97,11 +97,11 @@
         const playVideo = async () => {
             try {
                 await videoElement.play();
+                videoElement.muted = true;
                 videoElement.muted = false;
                 videoPlayed = true;
                 playIcon.style.display = 'none';
             } catch (err) {
-                alert(err)
                 playIcon.style.display = 'block'
             }
         };
@@ -112,10 +112,10 @@
         });
 
         // Listen for when a target is found
-        sceneEl.addEventListener('targetFound', () => {
+        sceneEl.addEventListener('targetFound', async () => {
             console.log('Target found');
             playIcon.style.display = 'block'; // Hide the play icon when target is lost
-            playVideo(); // Attempt to play the video automatically when target is found
+            await playVideo(); // Attempt to play the video automatically when target is found
         });
 
         // Hide play button and pause video when target is lost
@@ -131,10 +131,7 @@
 
         // Ensure that video plays on first user interaction
         document.body.addEventListener('click', () => {
-            if(videoElement.muted) {
-                alert('mudo')
-            }
-            playVideo();
+            videoElement.muted = false;
         });
     </script>
 </body>
