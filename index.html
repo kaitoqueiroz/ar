@@ -6,94 +6,16 @@
     <title>Carlito Carteiro - 44044</title>
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-        }
-        a-scene {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-        #overlay-container {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: auto;
-            height: auto;
-            transform: translateY(-50%);
-            pointer-events: none;
-            display: grid;
-            grid-gap: 10px;
-            background: white;
-            padding: 10px;
-            border-radius: 0 10px 10px 0;
-            border: 1px solid #bbb;
-            font-family: system-ui;
-        }
-        .overlay-button {
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            pointer-events: all;
-        }
-        #activate-camera-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 20;
-        }
-        #activate-camera-button {
-            color: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: white;
-            border: none;
-            padding: 20px;
-            border-radius: 10px;
-            font-size: 20px;
-            cursor: pointer;
-            margin: 10px;
-        }
-        #activate-camera-button img {
-            width: 30px;
-            height: 30px;
-            margin-bottom: 10px;
-        }
-        #play-icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 50px;
-            color: white;
-            cursor: pointer;
-            display: none; /* Hidden by default */
-            z-index: 10;
-        }
-    </style>
+    <link rel="stylesheet" crossorigin="" href="./style.css">
 </head>
 <body>
     <!-- AR Scene Setup -->
-    <a-scene mindar-image="imageTargetSrc: ./targets.mind; autoStart: false;" vr-mode-ui="enabled: false" embedded>
+    <a-scene mindar-image="imageTargetSrc: ./assets/targets.mind; autoStart: false;" vr-mode-ui="enabled: false" embedded>
         <a-assets>
-            <img id="instagram" src="./instagram.png" />
-            <img id="facebook" src="./facebook.png" />
+            <img id="instagram" src="./assets/instagram.png" />
+            <img id="facebook" src="./assets/facebook.png" />
             <!-- Ensure video is muted and playsinline -->
-            <video id="overlay-video" src="./video.mp4" loop muted crossorigin="anonymous" playsinline preload="auto"></video>
+            <video id="overlay-video" src="./assets/video.mp4" loop muted crossorigin="anonymous" playsinline preload="auto"></video>
         </a-assets>
 
         <a-camera id="camera" position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
@@ -108,64 +30,21 @@
     <div id="overlay-container">
         <div style="margin: auto;">Siga:</div>
         <a href="https://www.instagram.com/carlitoqueirozjr" target="_blank">
-            <img id="instagram-button" class="overlay-button" src="./instagram.png" />
+            <img id="instagram-button" class="overlay-button" src="./assets/instagram.png" />
         </a>
         <a href="https://www.facebook.com/carlitoqueirozjr" target="_blank">
-            <img id="facebook-button" class="overlay-button" src="./facebook.png" />
+            <img id="facebook-button" class="overlay-button" src="./assets/facebook.png" />
         </a>
     </div>
 
     <!-- Black Screen Overlay with Button -->
     <div id="activate-camera-overlay">
         <button id="activate-camera-button">
-            <img src="./camera-icon.png" alt="Camera Icon"/>
+            <img src="./assets/camera-icon.png" alt="Camera Icon"/>
             Clique aqui para ativar a câmera
         </button>
     </div>
 
-    <script>
-        const sceneEl = document.querySelector('a-scene');
-        const videoElement = document.getElementById('overlay-video');
-        const cameraOverlay = document.getElementById('activate-camera-overlay');
-        const activateCameraButton = document.getElementById('activate-camera-button');
-        let arSystem;
-
-        sceneEl.addEventListener('loaded', function () {
-            arSystem = sceneEl.systems["mindar-image-system"];
-            console.log('ready');
-            cameraOverlay.style.display = 'flex'
-        });
-
-        const playVideo = async () => {
-            try {
-                await videoElement.play();
-                videoElement.muted = false;
-            } catch (err) {
-                console.log(err);
-            }
-        };
-
-        // Listen for when a target is found
-        sceneEl.addEventListener('targetFound', async () => {
-            console.log('Target found');
-            await playVideo(); // Attempt to play the video automatically when target is found
-        });
-
-        // Hide play button and pause video when target is lost
-        sceneEl.addEventListener('targetLost', () => {
-            console.log('Target lost');
-            videoElement.pause(); // Pause the video when target is lost
-        });
-
-        videoElement.onerror = () => {
-            alert(videoElement.error.message);
-        };
-
-        // Activate the camera and hide the overlay
-        activateCameraButton.addEventListener('click', () => {
-            cameraOverlay.style.display = 'none';
-            arSystem.start();
-        });
-    </script>
+    <script crossorigin src="./app.js"></script>
 </body>
 </html>
