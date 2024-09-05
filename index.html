@@ -98,6 +98,7 @@
             videoElement.play().then(() => {
                 console.log('Video is playing');
                 videoElement.muted = false; // Unmute the video after it starts playing
+                alert(videoElement.muted)
                 videoPlayed = true;
                 playIcon.style.display = 'none'; // Hide the play icon after video starts
             }).catch((error) => {
