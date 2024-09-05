@@ -94,17 +94,16 @@
         const playIcon = document.getElementById('play-icon');
         let videoPlayed = false;
 
-        const playVideo = () => {
-            videoElement.play().then(() => {
-                console.log('Video is playing');
-                videoElement.muted = false; // Unmute the video after it starts playing
-                videoElement.volume = 1; // Unmute the video after it starts playing
+        const playVideo = async () => {
+            try {
+                await videoElem.play();
+                videoElement.muted = false;
                 videoPlayed = true;
-                playIcon.style.display = 'none'; // Hide the play icon after video starts
-            }).catch((error) => {
-                alert(error);
-                playIcon.style.display = 'block'; // Show the play icon if video failed to play automatically
-            });
+                playIcon.style.display = 'none';
+            } catch (err) {
+                alert(err)
+                playIcon.style.display = 'block'
+            }
         };
 
         // Listen for when MindAR is ready
