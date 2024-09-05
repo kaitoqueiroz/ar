@@ -132,10 +132,10 @@
 
         // Ensure that video plays on first user interaction
         window.addEventListener('click', () => {
-            videoElement.muted = false;
-            if (!videoPlayed) {
-                playVideo();
+            if(videoElement.muted) {
+                alert('mudo')
             }
+            playVideo();
         });
     </script>
 </body>
