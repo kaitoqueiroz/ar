@@ -85,36 +85,24 @@
         </a>
     </div>
 
-    <!-- Play Icon Overlay -->
-    <div id="play-icon" onclick="playVideo()">&#9658;</div> <!-- Unicode for play icon -->
-    <iframe src="silence.mp3" allow="autoplay" id="audio" style="display: none"></iframe>
-
-
     <script>
         const sceneEl = document.querySelector('a-scene');
         const videoElement = document.getElementById('overlay-video');
-        const playIcon = document.getElementById('play-icon');
+        let arSystem;
+        sceneEl.addEventListener('loaded', function () {
+            arSystem = sceneEl.systems["mindar-image-system"];
+            console.log('ready')
+        });
         let userInteracted = false;
 
         const playVideo = async () => {
             try {
                 await videoElement.play();
-                videoElement.muted = true;
                 videoElement.muted = false;
-                videoPlayed = true;
-                playIcon.style.display = 'none';
-                if (!userInteracted) {
-                    playIcon.style.display = 'block';
-                }
             } catch (err) {
-                playIcon.style.display = 'block'
+                console.log(err)
             }
         };
-
-        // Listen for when MindAR is ready
-        sceneEl.addEventListener('arReady', () => {
-            console.log('AR is ready');
-        });
 
         // Listen for when a target is found
         sceneEl.addEventListener('targetFound', async () => {
