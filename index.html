@@ -94,7 +94,7 @@
         const sceneEl = document.querySelector('a-scene');
         const videoElement = document.getElementById('overlay-video');
         const playIcon = document.getElementById('play-icon');
-        let videoPlayed = false;
+        let userInteracted = false;
 
         const playVideo = async () => {
             try {
@@ -103,6 +103,9 @@
                 videoElement.muted = false;
                 videoPlayed = true;
                 playIcon.style.display = 'none';
+                if (!userInteracted) {
+                    playIcon.style.display = 'block';
+                }
             } catch (err) {
                 playIcon.style.display = 'block'
             }
@@ -133,7 +136,7 @@
 
         // Ensure that video plays on first user interaction
         document.body.addEventListener('click', () => {
-            videoElement.muted = false;
+            userInteracted = true
         });
     </script>
 </body>
