@@ -41,7 +41,12 @@
             width: 50px;
             height: 50px;
             cursor: pointer;
-            pointer-events: all; /* Enable click events on the buttons */
+            pointer-events: all;
+        }
+        #play-button {
+            padding: 5px 10px;
+            cursor: pointer;
+            pointer-events: all;
         }
     </style>
 </head>
@@ -51,7 +56,8 @@
         <a-assets>
             <img id="instagram" src="./instagram.png" />
             <img id="facebook" src="./facebook.png" />
-            <video id="overlay-video" src="./video.mp4" loop crossorigin="anonymous" playsinline preload="auto" muted></video>
+            <!-- Ensure video is muted and playsinline -->
+            <video id="overlay-video" src="./video.mp4" loop muted crossorigin="anonymous" playsinline preload="auto"></video>
         </a-assets>
 
         <a-camera id="camera" position="0 0 0" look-controls="enabled: false" cursor="rayOrigin: mouse"></a-camera>
@@ -65,6 +71,8 @@
     <!-- Overlay Container for Buttons -->
     <div id="overlay-container">
         <div style="margin: auto;">Siga:</div>
+        <!-- Play button for user interaction -->
+        <button id="play-button" style="display: none;">Play Video</button>
         <a href="https://www.instagram.com/carlitoqueirozjr" target="_blank">
             <img id="instagram-button" class="overlay-button" src="./instagram.png" />
         </a>
@@ -74,34 +82,40 @@
     </div>
 
     <script>
-        const targetElement = document.getElementById('target');
+        const sceneEl = document.querySelector('a-scene');
         const videoElement = document.getElementById('overlay-video');
-        let targetFound = false;
+        const playButton = document.getElementById('play-button');
         let videoPlayed = false;
-    
+
         const playVideo = () => {
             videoElement.play().then(() => {
                 console.log('Video is playing');
-                videoElement.muted = false; // Unmute video after playing starts
+                videoElement.muted = false; // Unmute the video after it starts playing
                 videoPlayed = true;
+                playButton.style.display = 'none'; // Hide the play button after video starts
             }).catch((error) => {
                 console.error('Video play failed:', error);
             });
         };
-    
-        // Listen for MindAR events for when the target is detected
-        targetElement.addEventListener('targetFound', () => {
-            console.log('Target found');
-            targetFound = true;
+
+        // Listen for when MindAR is ready
+        sceneEl.addEventListener('arReady', () => {
+            console.log('AR is ready');
         });
-    
-        // Listen for a user interaction event
-        window.addEventListener('click', (event) => {
-            if (targetFound && !videoPlayed) {
-                playVideo(); // Play the video when the target is found and user has interacted
+
+        // Listen for when a target is found
+        sceneEl.addEventListener('targetFound', () => {
+            console.log('Target found');
+            if (!videoPlayed) {
+                playButton.style.display = 'block'; // Show play button when target is found
             }
         });
-    
+
+        // Play video on button click
+        playButton.addEventListener('click', () => {
+            playVideo(); // Play the video on button click
+        });
+
         // Preload the video
         videoElement.load();
     </script>
