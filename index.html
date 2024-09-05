@@ -130,7 +130,7 @@
         };
 
         // Ensure that video plays on first user interaction
-        window.addEventListener('click', () => {
+        document.body.addEventListener('click', () => {
             if(videoElement.muted) {
                 alert('mudo')
             }
