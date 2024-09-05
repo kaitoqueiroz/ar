@@ -125,6 +125,13 @@
 
         // Preload the video
         videoElement.load();
+
+        // Ensure that video plays on first user interaction
+        window.addEventListener('click', () => {
+            if (!videoPlayed) {
+                playVideo();
+            }
+        });
     </script>
 </body>
 </html>
